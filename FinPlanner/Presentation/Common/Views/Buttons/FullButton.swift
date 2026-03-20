@@ -1,26 +1,28 @@
 //
-//  SolidButton.swift
+//  FullButton.swift
 //  FinPlanner
 //
 //  Created by Сергей Смирнов on 20.03.2026.
 //
 import SwiftUI
 
-struct SolidButton: View {
+struct FullButton: View {
+	var text: String
+	var textColor: Color
+	var fillColor: Color
+	
 	var body: some View {
 		Button {
 			//
 		} label: {
-			Text("Подробнее")
-				.cygre(.light, 12)
-				.foregroundStyle(.appBlack)
+			Text(text)
+				.cygre(.regular, 12)
+				.foregroundStyle(textColor)
 				.padding(.top, 12)
 				.padding(.bottom, 16)
 				.frame(maxWidth: .infinity)
-				.overlay {
-					Capsule()
-						.stroke(.appBlack, lineWidth: 1)
-				}
+				.background(fillColor)
+				.clipShape(Capsule())
 		}
 	}
 }

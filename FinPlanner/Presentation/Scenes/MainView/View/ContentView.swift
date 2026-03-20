@@ -10,7 +10,9 @@ import SwiftUI
 struct ContentView: View {
 	var body: some View {
 		ZStack(alignment: .top) {
-			HeaderView()
+			HeaderView(page: HeaderViewContent(totalDebt: "723 434 ₽", title: "Сумма долга", date: "15 декабря", pageType: .main), action: {
+				print("add")
+			})
 				.zIndex(1)
 			
 			ScrollView(showsIndicators: false) {
@@ -25,6 +27,7 @@ struct ContentView: View {
 					}
 				}
 				.padding(.top, 130)
+				.padding(.bottom, 70)
 			}
 		}
 		.padding(.horizontal, 20)
