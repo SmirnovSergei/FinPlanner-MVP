@@ -9,12 +9,13 @@ import SwiftUI
 
 struct DetailsView: View {
 	@State var isNotificationSelected = false
+	@Binding var path: NavigationPath
 	
 	var body: some View {
 		VStack(alignment: .leading) {
 			header
 			
-			VStack {
+			VStack(alignment: .leading) {
 				VStack(alignment: .leading, spacing: -8) {
 					Text("82 200 ₽")
 						.cygre(.black, 27)
@@ -23,7 +24,7 @@ struct DetailsView: View {
 						.cygre(.black, 16)
 						.foregroundStyle(.appYellow)
 				}
-				.padding(.vertical, 30)
+				.padding(.vertical, 20)
 				
 				VStack(alignment: .leading, spacing: 26) {
 					VStack(alignment: .leading, spacing: 17) {
@@ -79,24 +80,21 @@ struct DetailsView: View {
 			Spacer()
 			
 			VStack(spacing: 18) {
-				FullButton(text: "Закрыть досрочно", textColor: .appBlack, fillColor: .appYellow)
+				SolidButton(text: "Закрыть досрочно", textColor: .appBlack, solidColor: .appYellow, isFull: true)
 				SolidButton(text: "Удалить последний платеж", textColor: .appYellow, solidColor: .appYellow)
 			}
 		}
 		.padding(.horizontal, 20)
 		.background(.appBlack)
+		.navigationBarHidden(true)
 	}
-}
-
-#Preview {
-	DetailsView()
 }
 
 extension DetailsView {
 	var header: some View {
 		HStack {
 			Button {
-				//
+				path.removeLast()
 			} label: {
 				Image(systemName: "chevron.left")
 					.resizable()

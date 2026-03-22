@@ -7,8 +7,10 @@
 import SwiftUI
 
 struct HeaderView: View {
+	@Binding var date: Date
+	
 	var page: HeaderViewContent
-	var action: () -> Void
+	var action: (() -> Void)?
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: -7) {
@@ -21,7 +23,7 @@ struct HeaderView: View {
 				
 				if page.pageType == .main {
 					Button {
-						action()
+						action?()
 					} label: {
 						ZStack {
 							Circle()
@@ -43,14 +45,18 @@ struct HeaderView: View {
 					Spacer()
 					
 					if page.pageType == .paymentList {
-						Button {
-							action()
-						} label: {
+						DatePicker("", selection: $date,
+								   displayedComponents: [.date]
+						)
+						.frame(width: 22)
+						.clipped()
+						.overlay {
 							Image(systemName: "calendar")
 								.resizable()
 								.scaledToFit()
-								.frame(width: 23, height: 23)
-								.padding(.top, 4)
+								.frame(width: 25, height: 25)
+								.background(.appBlack)
+								.allowsHitTesting(false)
 						}
 					}
 				}
