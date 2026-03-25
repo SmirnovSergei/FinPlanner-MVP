@@ -8,17 +8,18 @@ import SwiftUI
 
 struct PaymentCard: View {
 	@Binding var path: NavigationPath
+	var payment: Payment
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 12) {
 			VStack(alignment: .leading, spacing: 5) {
 				VStack(alignment: .leading, spacing: 10) {
 					VStack(alignment: .leading, spacing: 0) {
-						Text("Долг по кредитке")
+						Text(payment.title)
 							.cygre(.black, 24)
 						
 						HStack(spacing: 5) {
-							Text("₽ 32 500")
+							Text("32 500 ₽")
 								.cygre(.black, 12)
 							Text("/ Остаток")
 								.cygre(.regular, 12)
@@ -29,7 +30,7 @@ struct PaymentCard: View {
 					
 					HStack(spacing: 5) {
 						HStack {
-							Text("₽ 1 200")
+							Text("\(payment.paymentAmount.formattedWithoutDecimals) ₽")
 								.cygre(.black, 18)
 							Text("/ Месяц")
 								.cygre(.regular, 18)
@@ -38,7 +39,7 @@ struct PaymentCard: View {
 							HStack(spacing: 5) {
 								Text("оплатить до")
 									.cygre(.light, 12)
-								Text("21.12")
+								Text("\(payment.dueDay ?? 0)")
 									.cygre(.black, 12)
 							}
 							.padding(.horizontal, 11)
@@ -53,7 +54,7 @@ struct PaymentCard: View {
 			HStack {
 				FullButton(text: "Оплатить", textColor: .white, fillColor: .appBlack)
 				SolidButton(text: "Подробнее", textColor: .appBlack, bgColor: .clear, solidColor: .appBlack, isFull: false) {
-					path.append(NavigationPage.details)
+					path.append(NavigationPage.details(payment: payment))
 				}
 			}
 		}

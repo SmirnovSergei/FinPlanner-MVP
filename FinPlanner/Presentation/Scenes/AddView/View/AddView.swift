@@ -8,13 +8,7 @@
 import SwiftUI
 
 struct AddView: View {
-	@State var nameText: String = ""
-	@State var isNotificationSelected = false
-	@State var payType: PayType = .monthly
-	@State var date: Date = .now
-	@State var isShowCalendar = false
-	@State var isAdded: Bool = false
-	@State var viewModel: AddViewModel = Assembly.createAddViewModel()
+	@StateObject var viewModel: AddViewModel = Assembly.createAddViewModel()
 	
 	var body: some View {
 		VStack(alignment: .center, spacing: 27) {
@@ -22,7 +16,7 @@ struct AddView: View {
 				.cygre(.black, 18)
 				.foregroundStyle(.appYellow)
 			
-			if !isAdded {
+			if !viewModel.isAdded {
 				addViewContent
 			} else {
 				Spacer()
@@ -46,24 +40,24 @@ extension AddView {
 		VStack(alignment: .center, spacing: 27) {
 			VStack(alignment: .leading, spacing: 25) {
 				HStack(spacing: 23) {
-					SolidButton(text: "Каждый месяц", textColor: .appYellow, solidColor: .appYellow, isFull: payType == .monthly) {
-						payType = .monthly
+					SolidButton(text: "Каждый месяц", textColor: .appYellow, solidColor: .appYellow, isFull: viewModel.payType == .monthly) {
+						viewModel.payType = .monthly
 					}
-					SolidButton(text: "Разово", textColor: .appYellow, solidColor: .appYellow, isFull: payType == .oneTime) {
-						payType = .oneTime
+					SolidButton(text: "Разово", textColor: .appYellow, solidColor: .appYellow, isFull: viewModel.payType == .oneTime) {
+						viewModel.payType = .oneTime
 					}
 				}
 				
-				switch payType {
+				switch viewModel.payType {
 				case .monthly:
 					HStack(spacing: 4) {
-						DatePicker("", selection: $date,
+						DatePicker("", selection: $viewModel.date,
 								   displayedComponents: [.date]
 						)
 						.frame(width: 25)
 						.clipped()
 						.overlay {
-							Text("\(date.day)")
+							Text("\(viewModel.date.day)")
 								.underline()
 								.cygre(.black, 16)
 								.foregroundStyle(.appMint)
@@ -82,13 +76,13 @@ extension AddView {
 							.cygre(.light)
 							.foregroundStyle(.appMint)
 						
-						DatePicker("", selection: $date,
+						DatePicker("", selection: $viewModel.date,
 								   displayedComponents: [.date]
 						)
 						.frame(width: 150)
 						.clipped()
 						.overlay {
-							Text(date.dayMonthYear)
+							Text(viewModel.date.dayMonthYear)
 								.underline()
 								.cygre(.black, 16)
 								.foregroundStyle(.appMint)
@@ -102,19 +96,19 @@ extension AddView {
 			}
 			
 			VStack(alignment: .leading, spacing: 12) {
-				FieldView(placeholder: "Название платежа", text: $nameText, isTextField: true)
+				FieldView(placeholder: "Название платежа", text: $viewModel.paymentName)
 				
-				switch payType {
+				switch viewModel.payType {
 				case .monthly:
 					HStack(spacing: 10) {
-						FieldView(placeholder: "Общая сумма", text: $nameText, isTextField: true)
-						FieldView(placeholder: "Ежемесячный платеж", text: $nameText, isTextField: true)
+						FieldView(placeholder: "Общая сумма", text: $viewModel.totalAmount, isPriceField: true)
+						FieldView(placeholder: "Ежемесячный платеж", text: $viewModel.paymentAmount, isPriceField: true)
 					}
 				case .oneTime:
-					FieldView(placeholder: "Общая сумма", text: $nameText, isTextField: true)
+					FieldView(placeholder: "Общая сумма", text: $viewModel.totalAmount, isPriceField: true)
 				}
 				
-				FieldView(placeholder: "Описание", text: $nameText, isTextField: false)
+				FieldView(placeholder: "Описание", text: $viewModel.description, isTextField: false)
 			}
 			
 			HStack {
@@ -124,7 +118,7 @@ extension AddView {
 					.offset(y: -3)
 				
 				Spacer()
-				RadioButtonView(isSelected: $isNotificationSelected)
+				RadioButtonView(isSelected: $viewModel.isNotificationSelected)
 			}
 			.padding(.horizontal, 10)
 

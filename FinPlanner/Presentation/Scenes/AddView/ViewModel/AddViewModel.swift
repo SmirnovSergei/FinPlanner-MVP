@@ -14,20 +14,38 @@ class AddViewModel: ObservableObject {
 		self.createUseCase = createUseCase
 	}
 	
-	@Published var payment: Payment?
+	@Published var isNotificationSelected = false
+	@Published var payType: PayType = .monthly
+	@Published var isShowCalendar = false
+	@Published var isAdded: Bool = false
+	
+	// Fields
+	@Published var paymentName: String = ""
+	@Published var description: String = ""
+	@Published var paymentAmount: String = ""
+	@Published var totalAmount: String = ""
+	@Published var remainingAmount: String = ""
+	@Published var date: Date = .now
 	
 	func createNewPayment() {
+		// Validations
 		do {
 			try createUseCase.execute(payment: Payment(id: UUID().uuidString,
-													   type: .monthly,
-													   title: "Title",
-													   description: "Description",
-													   paymentAmount: 10,
-													   totalAmount: 20,
-													   isNotificationEnable: true,
-													   createdAt: .now))
+													   type: payType,
+													   title: paymentName,
+													   description: description,
+													   paymentAmount: Decimal(string: paymentAmount) ?? 0,
+													   totalAmount: Decimal(string: totalAmount) ?? 0,
+													   remainingAmount: Decimal(string: remainingAmount) ?? 0,
+													   dueDay: date.day,
+													   dueDate: date,
+													   isNotificationEnable: isNotificationSelected,
+													   createdAt: .now,
+													   lastPay: date))
+			isAdded.toggle()
 		} catch {
 			print(error.localizedDescription)
 		}
 	}
 }
+

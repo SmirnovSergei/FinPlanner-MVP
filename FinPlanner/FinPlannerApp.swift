@@ -18,13 +18,13 @@ struct FinPlannerApp: App {
 					.navigationBarHidden(true)
 					.navigationDestination(for: NavigationPage.self) { page in
 						switch page {
-						case .details:
-							DetailsView(path: $path)
+						case .details(let payment):
+							DetailsView(payment: payment, path: $path)
 						}
 					}
 			}
 			.onAppear {
-				print(FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask).first)
+				print(FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask).first as Any)
 			}
 		}
 	}

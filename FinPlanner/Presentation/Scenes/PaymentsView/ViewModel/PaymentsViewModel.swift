@@ -1,25 +1,29 @@
 //
-//  MainViewModel.swift
+//  PaymentsViewModel.swift
 //  FinPlanner
 //
-//  Created by Сергей Смирнов on 24.03.2026.
+//  Created by Сергей Смирнов on 25.03.2026.
 //
 
-import SwiftUI
+import Foundation
 import Combine
 
-//@MainActor
-class MainViewModel: ObservableObject {
+class PaymentsViewModel: ObservableObject {
+	@Published var payments: [Payment] = []
+	@Published var date: Date = .now {
+		didSet {
+			fetchPayments()
+		}
+	}
+	
 	private let fetchUseCase: FetchPaymentsUseCase
 	init(fetchUseCase: FetchPaymentsUseCase) {
 		self.fetchUseCase = fetchUseCase
 	}
 	
-	@Published var payments: [Payment] = []
-	
 	func fetchPayments() {
 		do {
-			try fetchUseCase.execute(from: nil) { [weak self] result in
+			try fetchUseCase.execute(from: date) { [weak self] result in
 				guard let self = self else { return }
 				switch result {
 				case .success(let succsess):
@@ -30,7 +34,6 @@ class MainViewModel: ObservableObject {
 					print(failure.localizedDescription)
 				}
 			}
-			
 		} catch {
 			print(error.localizedDescription)
 		}

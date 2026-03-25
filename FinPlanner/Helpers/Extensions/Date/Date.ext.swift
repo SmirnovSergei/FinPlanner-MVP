@@ -32,4 +32,38 @@ extension Date {
 	var day: Int {
 		Calendar.current.component(.day, from: self)
 	}
+	
+	var month: Int {
+		Calendar.current.component(.month, from: self)
+	}
+}
+
+extension Date {
+	var startOfMonth: Date {
+		let calendar = Calendar.current
+		return calendar.date(
+			from: calendar.dateComponents([.year, .month], from: self)
+		)!
+	}
+	
+	var endOfMonth: Date {
+		let calendar = Calendar.current
+		return calendar.date(
+			byAdding: .month,
+			value: 1,
+			to: startOfMonth
+		)!
+	}
+
+	var dateMonthString: String {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "dd.MM"
+		return formatter.string(from: self)
+	}
+	
+	func isInSameMonth(date: Date) -> Bool {
+		let calendar = Calendar.current
+		return calendar.component(.month, from: self) == calendar.component(.month, from: date) &&
+			   calendar.component(.year, from: self) == calendar.component(.year, from: date)
+	}
 }

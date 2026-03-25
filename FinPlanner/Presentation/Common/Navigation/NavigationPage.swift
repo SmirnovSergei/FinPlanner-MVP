@@ -8,5 +8,5 @@
 import Foundation
 
 enum NavigationPage: Hashable {
-	case details
+	case details(payment: Payment)
 }

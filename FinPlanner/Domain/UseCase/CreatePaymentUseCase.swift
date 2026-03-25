@@ -21,6 +21,4 @@ class CreateUseCaseImp: CreatePaymentUseCase {
 	func execute(payment: Payment) throws {
 		try repository.createPayment(payment: payment)
 	}
-	
-	
 }

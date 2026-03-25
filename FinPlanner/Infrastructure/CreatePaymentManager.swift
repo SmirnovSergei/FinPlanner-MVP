@@ -16,18 +16,3 @@ class CreatePaymentManager: CreatePaymentDataSource {
 		try context.save()
 	}
 }
-
-class PersistentContainer {
-	static let shared = PersistentContainer()
-	private init() {}
-	lazy var persistentContainer: NSPersistentContainer = {
-		
-		let container = NSPersistentContainer(name: "db")
-		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-			if let error = error as NSError? {
-				fatalError("Unresolved error \(error), \(error.userInfo)")
-			}
-		})
-		return container
-	}()
-}
