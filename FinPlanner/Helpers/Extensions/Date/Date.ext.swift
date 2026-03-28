@@ -61,6 +61,12 @@ extension Date {
 		return formatter.string(from: self)
 	}
 	
+	var fullDayAndMonthString: String {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "dd MMMM"
+		return formatter.string(from: self)
+	}
+	
 	func isInSameMonth(date: Date) -> Bool {
 		let calendar = Calendar.current
 		return calendar.component(.month, from: self) == calendar.component(.month, from: date) &&

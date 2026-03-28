@@ -19,7 +19,7 @@ struct FinPlannerApp: App {
 					.navigationDestination(for: NavigationPage.self) { page in
 						switch page {
 						case .details(let payment):
-							DetailsView(payment: payment, path: $path)
+							DetailsView(path: $path, viewModel: Assembly.createDetailsViewModel(payment: payment))
 						}
 					}
 			}

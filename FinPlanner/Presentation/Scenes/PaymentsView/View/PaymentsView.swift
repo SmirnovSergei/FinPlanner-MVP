@@ -19,7 +19,9 @@ struct PaymentsView: View {
 			ScrollView(showsIndicators: false) {
 				VStack(alignment: .leading, spacing: 19) {
 					ForEach(viewModel.payments) { payment in
-					PaymentCard(path: $path, payment: payment)
+						PaymentCard(path: $path, payment: payment) {
+							//
+						}
 					}
 				}
 				.padding(.top, 130)

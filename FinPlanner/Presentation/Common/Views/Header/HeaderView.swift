@@ -15,7 +15,7 @@ struct HeaderView: View {
 	var body: some View {
 		VStack(alignment: .leading, spacing: -7) {
 			HStack {
-				Text("\(page.totalDebt) ₽")
+				Text(page.totalDebt)
 					.cygre(.black, 27)
 					.foregroundStyle(.white)
 					.offset(y: -2)

@@ -30,18 +30,22 @@ class AddViewModel: ObservableObject {
 	func createNewPayment() {
 		// Validations
 		do {
+			var lastPayDate: Date? = nil
+			if payType == .monthly {
+				lastPayDate = Date.now
+			}
 			try createUseCase.execute(payment: Payment(id: UUID().uuidString,
 													   type: payType,
 													   title: paymentName,
 													   description: description,
-													   paymentAmount: Decimal(string: paymentAmount) ?? 0,
-													   totalAmount: Decimal(string: totalAmount) ?? 0,
-													   remainingAmount: Decimal(string: remainingAmount) ?? 0,
+													   paymentAmount: Decimal(string: paymentAmount) ?? .zero,
+													   totalAmount: Decimal(string: totalAmount) ?? .zero,
+													   remainingAmount: Decimal(string: totalAmount) ?? .zero,
 													   dueDay: date.day,
 													   dueDate: date,
 													   isNotificationEnable: isNotificationSelected,
 													   createdAt: .now,
-													   lastPay: date))
+													   lastPay: lastPayDate))
 			isAdded.toggle()
 		} catch {
 			print(error.localizedDescription)

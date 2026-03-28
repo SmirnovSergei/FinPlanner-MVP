@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct DetailsView: View {
-	@State var isNotificationSelected = false
-	var payment: Payment
 	@Binding var path: NavigationPath
+	@StateObject var viewModel: DetailsViewModel
+	
+	init(path: Binding<NavigationPath>, viewModel: DetailsViewModel) {
+		self._path = path
+		self._viewModel = StateObject(wrappedValue: viewModel)
+	}
 	
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -18,10 +22,10 @@ struct DetailsView: View {
 			
 			VStack(alignment: .leading) {
 				VStack(alignment: .leading, spacing: -8) {
-					Text("\(payment.totalAmount.formattedWithoutDecimals) ₽")
+					Text("\(viewModel.payment.totalAmount.formattedWithoutDecimals) ₽")
 						.cygre(.black, 27)
 						.foregroundStyle(.white)
-					Text("\(payment.title)")
+					Text("\(viewModel.payment.title)")
 						.cygre(.black, 16)
 						.foregroundStyle(.appYellow)
 				}
@@ -30,13 +34,13 @@ struct DetailsView: View {
 				VStack(alignment: .leading, spacing: 26) {
 					VStack(alignment: .leading, spacing: 17) {
 						HStack(spacing: 16) {
-							if payment.type == .monthly {
-								InfoTagView(text: "\(payment.remainingAmount.formattedWithoutDecimals) ₽")
-								InfoTagView(text: "\(payment.paymentAmount.formattedWithoutDecimals) ₽")
+							if viewModel.payment.type == .monthly {
+								InfoTagView(text: "\(viewModel.payment.remainingAmount.formattedWithoutDecimals) ₽")
+								InfoTagView(text: "\(viewModel.payment.paymentAmount.formattedWithoutDecimals) ₽")
 							}
 						}
 						
-						Text("\(payment.description)")
+						Text("\(viewModel.payment.description)")
 							.cygre(.regular)
 							.foregroundStyle(.appMint)
 					}
@@ -44,25 +48,9 @@ struct DetailsView: View {
 					VStack(alignment: .leading, spacing: 20) {
 						Divider()
 							.background(.appGray)
-						HStack {
-							Text("Ближайший платеж")
-								.cygre(.regular)
-								.foregroundStyle(.appYellow)
-								.offset(y: -3)
-							
-							Spacer()
-							HStack(spacing: 4) {
-								Text("оплачен")
-									.cygre(.regular, 12)
-								Text("13.12")
-									.cygre(.black, 12)
-							}
+						
+						PaymentStatus(paymentType: viewModel.payment.type, lastPay: viewModel.payment.lastPay, dueDate: viewModel.payment.dueDate)
 							.padding(.horizontal, 10)
-							.padding(.bottom, 4)
-							.background(.appYellow)
-							.clipShape(Capsule())
-						}
-						.padding(.horizontal, 10)
 						
 						Divider()
 							.background(.appGray)
@@ -74,7 +62,7 @@ struct DetailsView: View {
 								.offset(y: -3)
 							
 							Spacer()
-							RadioButtonView(isSelected: $isNotificationSelected)
+							RadioButtonView(isSelected: $viewModel.isNotificationSelected)
 						}
 						.padding(.horizontal, 10)
 					}
@@ -83,8 +71,12 @@ struct DetailsView: View {
 			Spacer()
 			
 			VStack(spacing: 18) {
-				SolidButton(text: "Закрыть досрочно", textColor: .appBlack, solidColor: .appYellow, isFull: true)
-				SolidButton(text: "Удалить последний платеж", textColor: .appYellow, solidColor: .appYellow)
+				SolidButton(text: "Закрыть досрочно", textColor: .appBlack, solidColor: .appYellow, isFull: true) {
+					viewModel.close()
+				}
+				SolidButton(text: "Удалить последний платеж", textColor: .appYellow, solidColor: .appYellow) {
+					viewModel.deleteLastPayment()
+				}
 			}
 		}
 		.padding(.horizontal, 20)
@@ -111,7 +103,7 @@ extension DetailsView {
 			Spacer()
 			
 			Button {
-				//
+				viewModel.delete()
 			} label: {
 				Image(systemName: "trash")
 					.resizable()

@@ -9,6 +9,7 @@ import SwiftUI
 struct PaymentCard: View {
 	@Binding var path: NavigationPath
 	var payment: Payment
+	var action: () -> Void
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 12) {
@@ -19,7 +20,7 @@ struct PaymentCard: View {
 							.cygre(.black, 24)
 						
 						HStack(spacing: 5) {
-							Text("32 500 ₽")
+							Text("\(payment.remainingAmount.formattedWithoutDecimals) ₽")
 								.cygre(.black, 12)
 							Text("/ Остаток")
 								.cygre(.regular, 12)
@@ -30,29 +31,29 @@ struct PaymentCard: View {
 					
 					HStack(spacing: 5) {
 						HStack {
-							Text("\(payment.paymentAmount.formattedWithoutDecimals) ₽")
-								.cygre(.black, 18)
-							Text("/ Месяц")
-								.cygre(.regular, 18)
+							if payment.type == .monthly {
+								Text("\(payment.paymentAmount.formattedWithoutDecimals) ₽")
+									.cygre(.black, 18)
+								Text("/ Месяц")
+									.cygre(.regular, 18)
+							} else {
+								Text("\(payment.remainingAmount.formattedWithoutDecimals) ₽")
+									.cygre(.black, 18)
+							}
 						}
 						Spacer()
-							HStack(spacing: 5) {
-								Text("оплатить до")
-									.cygre(.light, 12)
-								Text("\(payment.dueDay ?? 0)")
-									.cygre(.black, 12)
-							}
-							.padding(.horizontal, 11)
-							.padding(.bottom, 4)
-							.background(.appBlack)
-							.foregroundStyle(.white)
-							.clipShape(Capsule())
+						PaymentStatus(paymentType: payment.type, lastPay: payment.lastPay, dueDate: payment.dueDate, isShowLabel: false)
 					}
 				}
 			}
 			
 			HStack {
-				FullButton(text: "Оплатить", textColor: .white, fillColor: .appBlack)
+				if !(payment.lastPay?.isInSameMonth(date: Date.now) ?? false) {
+					FullButton(text: "Оплатить", textColor: .white, fillColor: .appBlack) {
+						action()
+					}
+				}
+				
 				SolidButton(text: "Подробнее", textColor: .appBlack, bgColor: .clear, solidColor: .appBlack, isFull: false) {
 					path.append(NavigationPage.details(payment: payment))
 				}
@@ -61,7 +62,7 @@ struct PaymentCard: View {
 		.padding(.horizontal, 12)
 		.padding(.top, 10)
 		.padding(.bottom, 20)
-		.background(.appRed)
+		.background(payment.lastPay?.isInSameMonth(date: Date.now) ?? false ? .appMint : .appRed)
 		.clipShape(RoundedRectangle(cornerRadius: 25))
 	}
 }

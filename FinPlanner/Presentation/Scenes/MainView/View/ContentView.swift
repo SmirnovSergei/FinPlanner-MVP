@@ -15,24 +15,28 @@ struct ContentView: View {
 	
 	var body: some View {
 		ZStack(alignment: .top) {
-			HeaderView(date: .constant(.now), page: HeaderViewContent(totalDebt: "723 434 ₽", title: "Сумма долга", date: "15 декабря", pageType: .main), action: {
+			HeaderView(date: .constant(.now), page: HeaderViewContent(totalDebt: "\(viewModel.totalRemainderAmount.formattedWithoutDecimals) ₽", title: "Сумма долга", date: Date.now.fullDayAndMonthString, pageType: .main), action: {
 				isShowAddView.toggle()
 			})
 				.zIndex(1)
 			
 			ScrollView(showsIndicators: false) {
 				VStack(alignment: .leading, spacing: 19) {
-					MainViewContentHeader(payType: $payType)
+					MainViewContentHeader(payType: $payType, totalMonthAmount: $viewModel.oneMonthRemainderAmount, totalOneTimeAmount: $viewModel.oneTimeRemainderAmount)
 					
 					VStack(alignment: .leading, spacing: 25) {
 						switch payType {
 						case .monthly:
 							ForEach(viewModel.payments.filter({ $0.type == .monthly })) { item in
-								PaymentCard(path: $path, payment: item)
+								PaymentCard(path: $path, payment: item) {
+									viewModel.setPayment(payment: item)
+								}
 							}
 						case .oneTime:
 							ForEach(viewModel.payments.filter({ $0.type == .oneTime })) { item in
-								PaymentCard(path: $path, payment: item)
+								PaymentCard(path: $path, payment: item) {
+									viewModel.setPayment(payment: item)
+								}
 							}
 						}
 					}
