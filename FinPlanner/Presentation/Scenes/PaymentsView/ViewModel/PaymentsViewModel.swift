@@ -8,8 +8,10 @@
 import Foundation
 import Combine
 
+@MainActor
 class PaymentsViewModel: ObservableObject {
 	@Published var payments: [Payment] = []
+	@Published var totalAmount: Decimal = .zero
 	@Published var date: Date = .now {
 		didSet {
 			fetchPayments()
@@ -27,9 +29,10 @@ class PaymentsViewModel: ObservableObject {
 				guard let self = self else { return }
 				switch result {
 				case .success(let succsess):
-					DispatchQueue.main.async {
-						self.payments = succsess
-					}
+					self.payments = succsess
+					self.totalAmount = succsess.reduce(0, {
+						$0 + $1.paymentAmount
+					})
 				case .failure(let failure):
 					print(failure.localizedDescription)
 				}

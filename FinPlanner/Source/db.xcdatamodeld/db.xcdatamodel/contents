@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25D125" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="PaymentEntity" representedClassName="PaymentEntity" syncable="YES">
+        <attribute name="closeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="descriptionText" attributeType="String"/>
         <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dueDay" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String"/>
+        <attribute name="isClose" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isNotificationEnable" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="lastPay" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="paymentAmount" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>

@@ -8,7 +8,7 @@
 import Foundation
 
 class Assembly {
-	static func createMainViewVodel() -> MainViewModel {
+	static func createMainViewModel() -> MainViewModel {
 		let dataSource = FetchPaymentManager()
 		let repo = FetchPaymentRepositoryImp(dataSource: dataSource)
 		let useCase = FetchPaymentsUseCaseImp(repository: repo)
@@ -35,6 +35,14 @@ class Assembly {
 	}
 	
 	static func createDetailsViewModel(payment: Payment) -> DetailsViewModel {
-		return DetailsViewModel(payment: payment)
+		let deleteDataSource = DeletePaymentManager()
+		let deleteRepo = DeletePaymentRepositoryImp(dataSource: deleteDataSource)
+		let deleteUseCase = DeletePaymentUseCaseImp(repo: deleteRepo)
+
+		let updateDataSource = UpdatePaymentManager()
+		let updateRepo = UpdatePaymentRepositoryImp(dataSource: updateDataSource)
+		let updateUseCase = UpdatePaymentUseCaseImp(repo: updateRepo)
+		
+		return DetailsViewModel(deleteUseCase: deleteUseCase, updateUseCase: updateUseCase, payment: payment)
 	}
 }

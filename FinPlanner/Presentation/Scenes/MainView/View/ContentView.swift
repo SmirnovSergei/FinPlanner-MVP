@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
 	@State var isShowAddView: Bool = false
 	@State var payType: PayType = .monthly
-	@StateObject var viewModel = Assembly.createMainViewVodel()
+	@StateObject var viewModel = Assembly.createMainViewModel()
 	@Binding var path: NavigationPath
 	
 	var body: some View {
@@ -28,13 +28,13 @@ struct ContentView: View {
 						switch payType {
 						case .monthly:
 							ForEach(viewModel.payments.filter({ $0.type == .monthly })) { item in
-								PaymentCard(path: $path, payment: item) {
+								PaymentCard(path: $path, isPay: false, payment: item) {
 									viewModel.setPayment(payment: item)
 								}
 							}
 						case .oneTime:
 							ForEach(viewModel.payments.filter({ $0.type == .oneTime })) { item in
-								PaymentCard(path: $path, payment: item) {
+								PaymentCard(path: $path, isPay: false, payment: item) {
 									viewModel.setPayment(payment: item)
 								}
 							}

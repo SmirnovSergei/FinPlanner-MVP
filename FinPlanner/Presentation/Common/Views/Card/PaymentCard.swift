@@ -8,8 +8,12 @@ import SwiftUI
 
 struct PaymentCard: View {
 	@Binding var path: NavigationPath
+	@State var isPay: Bool
 	var payment: Payment
 	var action: () -> Void
+	var checkIsPay: Bool {
+		!isPay && !(payment.lastPay?.isInSameMonth(date: Date.now) ?? false)
+	}
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 12) {
@@ -26,7 +30,7 @@ struct PaymentCard: View {
 								.cygre(.regular, 12)
 						}
 					}
-					Text("This course will be your personal guide to be in UI")
+					Text(payment.description)
 						.cygre(.regular, 14)
 					
 					HStack(spacing: 5) {
@@ -48,9 +52,10 @@ struct PaymentCard: View {
 			}
 			
 			HStack {
-				if !(payment.lastPay?.isInSameMonth(date: Date.now) ?? false) {
+				if checkIsPay {
 					FullButton(text: "Оплатить", textColor: .white, fillColor: .appBlack) {
 						action()
+						isPay.toggle()
 					}
 				}
 				
@@ -62,7 +67,19 @@ struct PaymentCard: View {
 		.padding(.horizontal, 12)
 		.padding(.top, 10)
 		.padding(.bottom, 20)
-		.background(payment.lastPay?.isInSameMonth(date: Date.now) ?? false ? .appMint : .appRed)
+		.background(checkIsPayColor())
 		.clipShape(RoundedRectangle(cornerRadius: 25))
 	}
+	
+//	@ViewBuilder
+	func checkIsPayColor() -> Color {
+		if isPay || payment.lastPay?.isInSameMonth(date: Date.now) ?? false {
+			return .appMint
+		}
+		return .appRed
+	}
+	
+//	func checkIsPay() -> Bool {
+//		isPay || !(payment.lastPay?.isInSameMonth(date: Date.now) ?? false)
+//	}
 }

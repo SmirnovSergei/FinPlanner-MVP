@@ -104,6 +104,7 @@ extension DetailsView {
 			
 			Button {
 				viewModel.delete()
+				path.removeLast()
 			} label: {
 				Image(systemName: "trash")
 					.resizable()

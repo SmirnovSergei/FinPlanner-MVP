@@ -36,6 +36,8 @@ extension PaymentEntity {
 	@NSManaged public var type: Int16
 	@NSManaged public var lastPay: Date?
 	@NSManaged public var remainingAmount: NSDecimalNumber?
+	@NSManaged public var isClose: Bool
+	@NSManaged public var closeDate: Date?
 
 }
 

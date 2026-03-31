@@ -21,7 +21,9 @@ struct PaymentMapper {
 							  dueDate: entitie.dueDate,
 							  isNotificationEnable: entitie.isNotificationEnable,
 							  createdAt: entitie.createdAt ?? .now,
-							  lastPay: entitie.lastPay)
+							  lastPay: entitie.lastPay,
+							  isClose: entitie.isClose,
+							  closeDate: entitie.closeDate ?? .now)
 		return payment
 	}
 	
@@ -39,6 +41,8 @@ struct PaymentMapper {
 		entitie.isNotificationEnable = from.isNotificationEnable
 		entitie.createdAt = from.createdAt
 		entitie.lastPay = from.lastPay
+		entitie.isClose = from.isClose
+		entitie.closeDate = from.closeDate
 		return entitie
 	}
 }

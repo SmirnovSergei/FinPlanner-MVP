@@ -20,4 +20,6 @@ struct Payment: Identifiable, Hashable {
 	var isNotificationEnable: Bool
 	var createdAt: Date
 	var lastPay: Date?
+	var isClose: Bool
+	var closeDate: Date?
 }

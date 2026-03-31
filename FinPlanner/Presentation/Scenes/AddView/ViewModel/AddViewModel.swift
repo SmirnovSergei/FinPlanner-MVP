@@ -18,6 +18,7 @@ class AddViewModel: ObservableObject {
 	@Published var payType: PayType = .monthly
 	@Published var isShowCalendar = false
 	@Published var isAdded: Bool = false
+	@Published var isClose: Bool = false
 	
 	// Fields
 	@Published var paymentName: String = ""
@@ -45,7 +46,9 @@ class AddViewModel: ObservableObject {
 													   dueDate: date,
 													   isNotificationEnable: isNotificationSelected,
 													   createdAt: .now,
-													   lastPay: lastPayDate))
+													   lastPay: lastPayDate,
+													   isClose: isClose,
+													   closeDate: .now))
 			isAdded.toggle()
 		} catch {
 			print(error.localizedDescription)
