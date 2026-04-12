@@ -24,7 +24,12 @@ class Assembly {
 		let manager = CreatePaymentManager()
 		let repo = CreatePaymentRepositoryImp(dataSource: manager)
 		let useCase = CreateUseCaseImp(repository: repo)
-		return AddViewModel(createUseCase: useCase)
+		
+		let notificationDataSource = NotificationManager()
+		let notificationRepo = NotificationRepositoryImp(dataSource: notificationDataSource)
+		let notificationUseCase = NotificationUseCaseImp(repository: notificationRepo)
+		
+		return AddViewModel(createUseCase: useCase, notificationUseCase: notificationUseCase)
 	}
 	
 	static func createPaymentsViewModel() -> PaymentsViewModel {
@@ -43,6 +48,10 @@ class Assembly {
 		let updateRepo = UpdatePaymentRepositoryImp(dataSource: updateDataSource)
 		let updateUseCase = UpdatePaymentUseCaseImp(repo: updateRepo)
 		
-		return DetailsViewModel(deleteUseCase: deleteUseCase, updateUseCase: updateUseCase, payment: payment)
+		let notificationDataSource = NotificationManager()
+		let notificationRepo = NotificationRepositoryImp(dataSource: notificationDataSource)
+		let notificationUseCase = NotificationUseCaseImp(repository: notificationRepo)
+		
+		return DetailsViewModel(deleteUseCase: deleteUseCase, updateUseCase: updateUseCase, notificationUseCase: notificationUseCase, payment: payment)
 	}
 }

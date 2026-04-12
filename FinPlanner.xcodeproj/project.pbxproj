@@ -99,11 +99,12 @@
 				};
 			};
 			buildConfigurationList = 0527A6D02F6C494B0047852C /* Build configuration list for PBXProject "FinPlanner" */;
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 0527A6CC2F6C494B0047852C;
 			minimizedProjectReferenceProxies = 1;

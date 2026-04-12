@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol FetchPaymentDataSource {
+protocol FetchPaymentDataSource: AnyObject {
 	func fetchPayments(date: Date?, completion: (Result<[Payment], Error>) -> Void) throws
 }

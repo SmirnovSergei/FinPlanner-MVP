@@ -63,6 +63,21 @@ struct DetailsView: View {
 							
 							Spacer()
 							RadioButtonView(isSelected: $viewModel.isNotificationSelected)
+								.alert("Уведомления отключены", isPresented: $viewModel.isShowedNotificationAlert) {
+									Button("Открыть настройки") {
+										guard let url = URL(string: UIApplication.openSettingsURLString) else {
+											return
+										}
+										
+										if UIApplication.shared.canOpenURL(url) {
+											UIApplication.shared.open(url)
+										}
+									}
+									
+									Button("Отмена", role: .cancel) { }
+								} message: {
+									Text("Чтобы получать уведомления, включите их в настройках приложения")
+								}
 						}
 						.padding(.horizontal, 10)
 					}

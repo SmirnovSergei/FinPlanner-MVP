@@ -77,3 +77,11 @@ extension Date {
 		Calendar.current.date(byAdding: .month, value: -value, to: self) ?? self
 	}
 }
+
+extension Date {
+	func clampedDay(_ day: Int, calendar: Calendar = .current) -> Int {
+		let range = calendar.range(of: .day, in: .month, for: self)
+		let maxDay = range?.count ?? 28
+		return min(day, maxDay)
+	}
+}

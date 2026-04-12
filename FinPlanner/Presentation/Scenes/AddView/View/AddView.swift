@@ -17,7 +17,18 @@ struct AddView: View {
 				.foregroundStyle(.appYellow)
 			
 			if !viewModel.isAdded {
-				addViewContent
+				ZStack {
+					Color.appBlack
+						.ignoresSafeArea()
+					addViewContent
+				}
+				.onTapGesture {
+					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+													to: nil,
+													from: nil,
+													for: nil
+					)
+				}
 			} else {
 				Spacer()
 				addSuccsess
@@ -28,6 +39,21 @@ struct AddView: View {
 		.padding(.vertical, 20)
 		.frame(maxWidth: .infinity)
 		.background(.appBlack)
+		.alert("Уведомления отключены", isPresented: $viewModel.isShowedNotificationAlert) {
+			Button("Открыть настройки") {
+				guard let url = URL(string: UIApplication.openSettingsURLString) else {
+					return
+				}
+				
+				if UIApplication.shared.canOpenURL(url) {
+					UIApplication.shared.open(url)
+				}
+			}
+			
+			Button("Отмена", role: .cancel) { }
+		} message: {
+			Text("Чтобы получать уведомления, включите их в настройках приложения")
+		}
 	}
 }
 
@@ -119,6 +145,21 @@ extension AddView {
 				
 				Spacer()
 				RadioButtonView(isSelected: $viewModel.isNotificationSelected)
+					.alert("Уведомления отключены", isPresented: $viewModel.isShowedNotificationAlert) {
+						Button("Открыть настройки") {
+							guard let url = URL(string: UIApplication.openSettingsURLString) else {
+								return
+							}
+							
+							if UIApplication.shared.canOpenURL(url) {
+								UIApplication.shared.open(url)
+							}
+						}
+						
+						Button("Отмена", role: .cancel) { }
+					} message: {
+						Text("Чтобы получать уведомления, включите их в настройках приложения")
+					}
 			}
 			.padding(.horizontal, 10)
 
@@ -126,6 +167,8 @@ extension AddView {
 			FullButton(text: "Добавить", textColor: .appBlack, fillColor: .appYellow) {
 				viewModel.createNewPayment()
 			}
+			.opacity(viewModel.isFormValid ? 1 : 0.5)
+			.disabled(!viewModel.isFormValid)
 		}
 	}
 }
