@@ -53,7 +53,7 @@ class NotificationManager: NotificationDataSource {
 		component.hour = 11
 		component.minute = 1
 		
-		var trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: item.type == .monthly)
+		let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: item.type == .monthly)
 		let request = UNNotificationRequest(identifier: item.id,
 											content: content,
 											trigger: trigger)
